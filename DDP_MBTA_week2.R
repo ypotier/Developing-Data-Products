@@ -22,7 +22,7 @@ stops = read.csv(mbta_stops)
 # since the total size is more than 9000 points and it takes time to render, I create a smaller dataset of 500 rows
 sample_data <- stops[c(1:500),]
 
-
+# Populate data and add name and City as metadata for user
 my_map <- leaflet(data = sample_data) %>%
   addTiles() %>%
   addMarkers(lng = sample_data$stop_lon,

@@ -1,0 +1,52 @@
+---
+title: "DDP_week2_MBTA"
+author: "Yohann Potier"
+date: "7/2/2019"
+output: html_document
+---
+## Week 2 Developer Data product exercise 
+<!-- # Create a web page using R Markdown that features a map created with Leaflet. -->
+<!-- # Host your webpage on either GitHub Pages, RPubs, or NeoCities. -->
+<!-- # Your webpage must contain the date that you created the document, and it must contain a map created with Leaflet. We would love to see you show off your creativity! -->
+
+- MTBA data: https://www.mbta.com/developers/gtfs 
+- MBTA developer tools: https://www.mbta.com/developers 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```r
+library(leaflet)
+library(here)
+library(dplyr)
+```
+
+## Map the Boston Area
+```{r, eval=FALSE}
+my_map <- leaflet() %>% 
+  addTiles() %>% 
+  setView(lng=-71.0589, lat=42.3601 , zoom=12) #  Boston coordinates and zoom around Boston metropole only
+my_map
+```
+
+## Load MBTA stops data
+- Using here package for relative path instead of hardcoding mine
+- Since the total size is more than 9000 points and it takes time to render, I create a smaller dataset of 500 rows
+```{r, eval=FALSE}
+mbta_stops=here::here("MBTA_GTFS", "stops.txt")
+stops = read.csv(mbta_stops)
+sample_data <- stops[c(1:500),]
+```
+
+## Populate data and add name and City as metadata for user
+```{r, eval=FALSE}
+my_map <- leaflet(data = sample_data) %>%
+  addTiles() %>%
+  addMarkers(lng = sample_data$stop_lon,
+             lat = sample_data$stop_lat,
+             popup = paste("Name", sample_data$stop_name, "<br>",
+                           "City:", sample_data$municipality))
+
+my_map
+```
