@@ -19,11 +19,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ```r
 library(leaflet)
 library(here)
-library(dplyr)
 ```
 
 ## Map the Boston Area
 ```{r, eval=FALSE}
+my_map <- leaflet() %>% 
+  addTiles() %>% 
+  setView(lng=-71.0589, lat=42.3601 , zoom=12) #  Boston coordinates and zoom around Boston metropole only
+my_map
+```
+
+```{r, echo=FALSE}
+library(leaflet)
 my_map <- leaflet() %>% 
   addTiles() %>% 
   setView(lng=-71.0589, lat=42.3601 , zoom=12) #  Boston coordinates and zoom around Boston metropole only
@@ -39,8 +46,27 @@ stops = read.csv(mbta_stops)
 sample_data <- stops[c(1:500),]
 ```
 
+```{r, echo=FALSE}
+library(here)
+mbta_stops=here::here("MBTA_GTFS", "stops.txt")
+stops = read.csv(mbta_stops)
+sample_data <- stops[c(1:500),]
+```
+
 ## Populate data and add name and City as metadata for user
 ```{r, eval=FALSE}
+library(leaflet)
+my_map <- leaflet(data = sample_data) %>%
+  addTiles() %>%
+  addMarkers(lng = sample_data$stop_lon,
+             lat = sample_data$stop_lat,
+             popup = paste("Name", sample_data$stop_name, "<br>",
+                           "City:", sample_data$municipality))
+
+my_map
+```
+
+```{r, echo=FALSE}
 my_map <- leaflet(data = sample_data) %>%
   addTiles() %>%
   addMarkers(lng = sample_data$stop_lon,
