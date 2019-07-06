@@ -17,14 +17,27 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```r
+library(plotly)
+library(knitr)
+```
+
+## Melanoma dataset 
+```{r, eval=FALSE}
+library(plotly)
+library(knitr)
+load(file="Melanoma.RData")
+kable(Melanoma[1:5,], caption = "Melanoma table content")
+```
+
 ```{r, echo=FALSE}
 library(plotly)
-data("Melanoma")
+library(knitr)
+load(file="Melanoma.RData")
+kable(Melanoma[1:5,], caption = "Melanoma table content")
 ```
-## Melanoma dataset 
-```r
-head(Melanoma)
-```
+
+
 * time
   + Survival time in days since the operation, possibly censored.
 * status
@@ -41,7 +54,21 @@ head(Melanoma)
   + Indicator of ulceration; 1=present, 0=absent.
 
 ## build linear model based on data for plotting
-```r
+```{r, eval=FALSE}
+time<-Melanoma$time
+status<-Melanoma$status
+
+status<-as.factor(status) 
+
+age<-Melanoma$age
+thickness<-Melanoma$thickness
+ulcer<-Melanoma$ulcer
+
+model<-glm(ulcer~time+thickness,
+           family = binomial(link = "logit"), data = Melanoma)
+```
+
+```{r, echo=FALSE}
 time<-Melanoma$time
 status<-Melanoma$status
 
@@ -56,7 +83,7 @@ model<-glm(ulcer~time+thickness,
 ```
 
 ## Update legend, axis labels and font
-```r
+```{r, eval=FALSE}
 f <- list(
   family = "Arial, monospace",
   size = 18,
@@ -76,8 +103,34 @@ Melanoma$sex <- factor(Melanoma$sex,
                     levels = c(0,1),
                     labels = c("female", "male"))
 ```
-## Plotting linear model as a function of time
-```r
+
+```{r, echo=FALSE}
+f <- list(
+  family = "Arial, monospace",
+  size = 18,
+  color = "#7f7f7f"
+)
+
+x <- list(
+  title = "Time",
+  titlefont = f
+)
+y <- list(
+  title = "Prediction of ulcer based on time and tickness",
+  titlefont = f
+)
+
+Melanoma$sex <- factor(Melanoma$sex,
+                    levels = c(0,1),
+                    labels = c("female", "male"))
+```
+## Plotting linear predictive model of ulcer as a function of time and tumor tickness
+```{r, eval=FALSE}
+plot_ly(Melanoma, x = ~time, y = ~model, type = "scatter", mode = "lines", color = ~factor(sex)) %>%
+  layout(xaxis = x, yaxis = y)
+```
+
+```{r, echo=FALSE}
 plot_ly(Melanoma, x = ~time, y = ~model, type = "scatter", mode = "lines", color = ~factor(sex)) %>%
   layout(xaxis = x, yaxis = y)
 ```

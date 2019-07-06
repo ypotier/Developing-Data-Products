@@ -29,6 +29,7 @@
 
 library(plotly)
 data("Melanoma")
+save(Melanoma, file="Melanoma.RData")
 
 time<-Melanoma$time
 status<-Melanoma$status
