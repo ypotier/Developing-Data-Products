@@ -90,7 +90,7 @@ x <- list(
   titlefont = f
 )
 y <- list(
-  title = "Prediction of ulcer based on time and tickness",
+  title = "Prediction of ulcer based on time and thickness",
   titlefont = f
 )
 
@@ -111,7 +111,7 @@ x <- list(
   titlefont = f
 )
 y <- list(
-  title = "Prediction of ulcer based on time and tickness",
+  title = "Prediction of ulcer based on time and thickness",
   titlefont = f
 )
 
@@ -119,7 +119,7 @@ Melanoma$sex <- factor(Melanoma$sex,
                     levels = c(0,1),
                     labels = c("female", "male"))
 ```
-## Plotting linear predictive model of ulcer as a function of time and tumor tickness
+## Plotting linear predictive model of ulcer as a function of time and tumor thickness
 ```{r, eval=FALSE}
 plot_ly(Melanoma, x = ~time, y = ~model, type = "scatter", mode = "lines", color = ~factor(sex)) %>%
   layout(xaxis = x, yaxis = y)
