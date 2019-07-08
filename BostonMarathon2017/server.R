@@ -8,19 +8,31 @@
 #
 
 library(shiny)
+library(here)
+
+
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+    # Read CSV into R
+    bm2017=here::here("marathon_results_2017.csv")
+    dataset <- read.csv(bm2017, header=TRUE, sep=",")
+    
+    datasetInput <- reactive({
+        switch(input$sex,
+               "male" = male,
+               "female" = female,
+               "both" = both)
+    })
+    
+    output$summary <- renderPrint({
+        dataset <- datasetInput()
+        summary(dataset)
+    })
+    
+    output$table <- renderTable({
+        head(datasetInput())
     })
 
 })
