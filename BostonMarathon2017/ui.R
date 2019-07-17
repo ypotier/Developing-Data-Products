@@ -18,17 +18,14 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            "Multiple sliders and choices",
-            selectInput(inputId = "MarathonData",
-                        label = "Choose a dataset:",
-                        choices = c("Male", "Female")),
+            numericInput('clusters', 'Cluster count', 10, min = 1, max = 9)
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
             tabsetPanel(type = "tabs",
                         tabPanel("Plot & Statistics", plotOutput("plot")),
-                        tabPanel("Data Table", tableOutput("table"))
+                        tabPanel("Dataset", DT::dataTableOutput("table"))
             )
         )
     )
