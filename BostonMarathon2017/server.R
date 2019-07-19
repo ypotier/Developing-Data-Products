@@ -9,7 +9,8 @@
 
 library(shiny)
 library(here)
-
+library(plotly)
+library(plyr)
 
 
 # Define server logic required to draw a histogram
@@ -23,25 +24,35 @@ shinyServer(function(input, output) {
         dataset
     }))
     
-    # datasetInput <- reactive({
-    #     switch(input$sex,
-    #            "male" = male,
-    #            "female" = female,
-    #            "both" = both)
-    # })
-    # 
-    # output$summary <- renderPrint({
-    #     dataset <- datasetInput()
-    #     summary(dataset)
-    # })
+    countries <- sort(unique(dataset$Country))
+    output$countrySlider <- renderUI({
+        # Widget for selecting the variable among names of columns of the data set
+        selectInput("select.variable", label = h4("Select the country:"),
+                    choices = (countries))
+        
+    })
+    
+    states <- sort(unique(dataset$State))
+    output$stateSlider <- renderUI({
+        # Widget for selecting the variable among names of columns of the data set
+        selectInput("select.variable", label = h4("Select the state:"),
+                    choices = (states))
+        
+    })
     
     # General stats ()
-    TotalFinisher = max(MarathonData$Overall)
-    summary(MarathonData$M.F)
+    TotalFinisher = max(dataset$Overall)
+    output$finisher <- renderText({
+        paste("The number of finisher is ", TotalFinisher)
+    })
     
+    allCountries = count(dataset,'Country')
     
- #   output$table <- renderTable({
- #       head(dataset)
- #   })
+    output$plotCountries <- renderPlotly({
+        plot_ly(allCountries, labels = ~Country, values = ~freq, type = 'pie')  %>%
+            layout(title = 'Finishers by Country', 
+                   xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                   yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    })
 
 })
