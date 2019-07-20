@@ -47,12 +47,10 @@ shinyUI(fluidPage(
                                  
                                  
                                  textOutput("finisher"),
-
-                                 plotlyOutput("plotCountries")
-                                 
-                                 
-                                 
-                                 
+                                 plotlyOutput("top10plot")#,
+                                 #plotlyOutput("plotCountries"),
+                                 #plotlyOutput("plotStates")
+                                
                                  ),
                         tabPanel("Dataset", DT::dataTableOutput("table"))
             )
